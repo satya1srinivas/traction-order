@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traction Controller Order</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f3;min-height:100vh;padding:1.5rem 1rem;color:#1a1a18}
+  .w{max-width:560px;margin:0 auto}
+  .header{text-align:center;margin-bottom:2rem}
+  .header .logo{font-size:12px;font-weight:600;color:#888;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px}
+  .header h1{font-size:22px;font-weight:700;color:#1a1a18}
+  .card{background:#fff;border:1px solid #e8e8e5;border-radius:16px;padding:1.5rem;margin-bottom:1rem}
+  .prog-bg{background:#ebebea;border-radius:999px;height:5px;margin-bottom:1.5rem;overflow:hidden}
+  .prog-fill{height:100%;background:#2563eb;border-radius:999px;transition:width 0.35s ease}
+  .slabel{font-size:12px;color:#999;margin-bottom:4px}
+  .stitle{font-size:20px;font-weight:700;color:#1a1a18;margin-bottom:1.25rem}
+  .fgroup{margin-bottom:1rem}
+  .fl{font-size:13px;color:#555;margin-bottom:5px;display:block}
+  .req{color:#e53e3e;margin-left:2px}
+  input[type=text],input[type=tel],textarea{width:100%;border:1px solid #ddd;border-radius:9px;padding:10px 13px;font-size:14px;font-family:inherit;color:#1a1a18;background:#fff;outline:none;transition:border-color 0.15s,box-shadow 0.15s}
+  input[type=text]:focus,input[type=tel]:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+  textarea{resize:vertical;min-height:70px}
+  .qty-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.5rem}
+  .qty-btn{border:1px solid #e8e8e5;border-radius:12px;padding:1rem 0;text-align:center;cursor:pointer;background:#fff;transition:border-color 0.15s,background 0.15s;user-select:none}
+  .qty-btn:hover{border-color:#93c5fd;background:#eff6ff}
+  .qty-btn.sel{border-color:#2563eb;background:#eff6ff}
+  .qty-btn .qn{font-size:22px;font-weight:700;color:#1a1a18}
+  .qty-btn.sel .qn{color:#2563eb}
+  .qty-btn .ql{font-size:11px;color:#bbb;margin-top:2px}
+  .same-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+  .same-card{border:1px solid #e8e8e5;border-radius:13px;padding:1.25rem;text-align:center;cursor:pointer;background:#fff;transition:border-color 0.15s,background 0.15s;user-select:none}
+  .same-card:hover{border-color:#93c5fd;background:#eff6ff}
+  .same-card.sel{border-color:#2563eb;background:#eff6ff}
+  .same-card .sc-icon{font-size:28px;margin-bottom:8px}
+  .same-card .sc-t{font-size:14px;font-weight:700;color:#1a1a18}
+  .same-card .sc-s{font-size:12px;color:#888;margin-top:4px;line-height:1.5}
+  .spec-stepper{display:flex;align-items:center;gap:5px;margin-bottom:1rem;flex-wrap:wrap}
+  .spec-dot{width:8px;height:8px;border-radius:50%;background:#ddd;transition:background 0.2s,width 0.2s}
+  .spec-dot.done{background:#16a34a}
+  .spec-dot.active{background:#2563eb;width:20px;border-radius:4px}
+  .unit-block{background:#f9f9f8;border:1px solid #e8e8e5;border-radius:12px;padding:1rem 1.25rem;margin-bottom:10px}
+  .unit-label{font-size:13px;font-weight:600;color:#2563eb;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .unit-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;margin-bottom:14px}
+  .opts{display:flex;flex-direction:column;gap:7px}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1px solid #e8e8e5;border-radius:9px;cursor:pointer;background:#fff;transition:border-color 0.15s,background 0.15s;user-select:none}
+  .opt:hover{border-color:#93c5fd;background:#eff6ff}
+  .opt.sel{border-color:#2563eb;background:#eff6ff}
+  .opt input[type=radio]{accent-color:#2563eb;width:15px;height:15px;cursor:pointer;flex-shrink:0}
+  .opt-label{font-size:13px;color:#1a1a18}
+  .opt.sel .opt-label{color:#2563eb;font-weight:500}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;gap:10px}
+  .btn-back{background:#fff;border:1px solid #ddd;border-radius:9px;padding:10px 20px;font-size:14px;cursor:pointer;color:#666;font-family:inherit;transition:background 0.15s}
+  .btn-back:hover{background:#f5f5f3}
+  .btn-next{background:#2563eb;border:none;border-radius:9px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer;color:#fff;font-family:inherit;transition:opacity 0.15s}
+  .btn-next:hover{opacity:0.88}
+  .btn-submit{background:#16a34a;border:none;border-radius:9px;padding:10px 24px;font-size:14px;font-weight:600;cursor:pointer;color:#fff;font-family:inherit;transition:opacity 0.15s}
+  .btn-submit:hover{opacity:0.88}
+  .sum-card{background:#fff;border:1px solid #e8e8e5;border-radius:12px;padding:1rem 1.25rem;margin-bottom:10px}
+  .sum-title{font-size:11px;font-weight:700;color:#2563eb;margin-bottom:8px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.05em}
+  .sumrow{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0ee;font-size:13px;gap:8px}
+  .sumrow:last-child{border-bottom:none}
+  .sumrow .sk{color:#999;flex-shrink:0}
+  .sumrow .sv{font-weight:500;color:#1a1a18;text-align:right}
+  .success{text-align:center;padding:2.5rem 1rem}
+  .success h2{font-size:22px;font-weight:700;color:#1a1a18;margin:0.75rem 0 0.5rem}
+  .success p{font-size:14px;color:#666;line-height:1.6;margin-bottom:1.5rem}
+  @media(max-width:420px){
+    .qty-grid{gap:6px}
+    .qty-btn .qn{font-size:18px}
+    .same-cards{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="header">
+    <div class="logo">Spare Parts</div>
+    <h1>Traction Controller Order</h1>
+  </div>
+  <div class="card">
+    <div class="prog-bg"><div class="prog-fill" id="prog" style="width:5%"></div></div>
+    <div id="app"></div>
+  </div>
+</div>
+
+<script>
+const SPECS=[
+  {id:'type',label:'Type',opts:['Auto','Manual','Multitype']},
+  {id:'safety_v',label:'Safety voltage',opts:['12V','110V']},
+  {id:'sensor',label:'Sensor',opts:['Counting','Reed']},
+  {id:'mb',label:'Motherboard type',opts:['Single wire','Regular','Display motherboard']},
+  {id:'ctrl_v',label:'Controller voltage',opts:['12V','24V']},
+  {id:'drive',label:'Drive',opts:['Schneider 4kw/5hp','Schneider 5.5kw/7.5hp','Schneider 7.5kw/10hp','Monarch 4kw/5hp','Monarch 5.5kw/7.5hp','None']},
+];
+
+let s={step:0,company:'',person:'',mobile:'',qty:0,sameSpec:null,shared:{},units:[],comments:''};
+
+function esc(v){return (v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function go(n){
+  s.step=n;
+  const totalSteps=3+SPECS.length+1;
+  const prog=Math.min(Math.round((n/Math.max(totalSteps-1,1))*100),100);
+  document.getElementById('prog').style.width=prog+'%';
+  render();
+  window.scrollTo(0,0);
+}
+
+function render(){
+  let h='';
+  const step=s.step;
+
+  if(step===0){
+    h+=`<div class="slabel">Step 1 of ${3+SPECS.length} — Contact details</div>
+    <div class="stitle">Who's placing this order?</div>
+    <div class="fgroup"><label class="fl">Company name<span class="req">*</span></label><input type="text" id="f_co" value="${esc(s.company)}" placeholder="ABC Elevators"></div>
+    <div class="fgroup"><label class="fl">Your name<span class="req">*</span></label><input type="text" id="f_pe" value="${esc(s.person)}" placeholder="Ravi Kumar"></div>
+    <div class="fgroup"><label class="fl">Mobile number<span class="req">*</span></label><input type="tel" id="f_mo" value="${esc(s.mobile)}" placeholder="98765 43210"></div>
+    <div class="nav"><div></div><button class="btn-next" onclick="step0()">Next →</button></div>`;
+
+  } else if(step===1){
+    h+=`<div class="slabel">Step 2 of ${3+SPECS.length} — Quantity</div>
+    <div class="stitle">How many controllers?</div>
+    <div class="qty-grid">`;
+    for(let n=1;n<=10;n++){
+      h+=`<div class="qty-btn${s.qty===n?' sel':''}" onclick="setQty(${n})">
+        <div class="qn">${n}</div><div class="ql">unit${n>1?'s':''}</div></div>`;
+    }
+    h+=`</div><div class="nav"><button class="btn-back" onclick="go(0)">← Back</button><button class="btn-next" onclick="step1()">Next →</button></div>`;
+
+  } else if(step===2){
+    if(s.qty===1){s.sameSpec=true;s.shared={};go(3);return;}
+    h+=`<div class="slabel">Step 3 of ${3+SPECS.length} — Specifications</div>
+    <div class="stitle">Are all ${s.qty} controllers the same spec?</div>
+    <div class="same-cards">
+      <div class="same-card${s.sameSpec===true?' sel':''}" onclick="setSame(true)">
+        <div class="sc-icon">📋</div>
+        <div class="sc-t">Yes, all same</div>
+        <div class="sc-s">Fill once,<br>applies to all ${s.qty}</div>
+      </div>
+      <div class="same-card${s.sameSpec===false?' sel':''}" onclick="setSame(false)">
+        <div class="sc-icon">🔧</div>
+        <div class="sc-t">No, different</div>
+        <div class="sc-s">One page per spec,<br>fill all together</div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn-back" onclick="go(1)">← Back</button><button class="btn-next" onclick="step2()">Next →</button></div>`;
+
+  } else if(step>=3 && step<3+SPECS.length){
+    const specIdx=step-3;
+    const spec=SPECS[specIdx];
+    const isLast=specIdx===SPECS.length-1;
+
+    h+=`<div class="slabel">Specifications — ${specIdx+1} of ${SPECS.length}</div>
+    <div class="stitle">${esc(spec.label)}</div>
+    <div class="spec-stepper">`;
+    for(let i=0;i<SPECS.length;i++){
+      h+=`<div class="spec-dot${i<specIdx?' done':i===specIdx?' active':''}"></div>`;
+    }
+    h+=`</div>`;
+
+    if(s.sameSpec){
+      h+=`<div class="unit-pill">⚙ All ${s.qty} controller${s.qty>1?'s':''}</div>
+      <div class="opts">`;
+      spec.opts.forEach(o=>{
+        const cur=s.shared[spec.id];
+        h+=`<div class="opt${cur===o?' sel':''}" onclick="pickShared('${spec.id}','${esc(o)}')">
+          <input type="radio" name="sh_${spec.id}" ${cur===o?'checked':''}><span class="opt-label">${o}</span></div>`;
+      });
+      h+=`</div>`;
+    } else {
+      for(let i=0;i<s.qty;i++){
+        const cur=(s.units[i]||{})[spec.id];
+        h+=`<div class="unit-block">
+          <div class="unit-label">⚙ Controller ${i+1}</div>
+          <div class="opts">`;
+        spec.opts.forEach(o=>{
+          h+=`<div class="opt${cur===o?' sel':''}" onclick="pickUnit(${i},'${spec.id}','${esc(o)}')">
+            <input type="radio" name="u${i}_${spec.id}" ${cur===o?'checked':''}><span class="opt-label">${o}</span></div>`;
+        });
+        h+=`</div></div>`;
+      }
+    }
+
+    h+=`<div class="nav">
+      <button class="btn-back" onclick="go(${step-1})">← Back</button>
+      <button class="btn-next" onclick="specNext(${specIdx})">${isLast?'Review order →':'Next →'}</button>
+    </div>`;
+
+  } else if(step===3+SPECS.length){
+    h+=`<div class="slabel">Final step — Review your order</div><div class="stitle">Order summary</div>`;
+    h+=`<div class="sum-card"><div class="sum-title">📞 Contact</div>`;
+    h+=`<div class="sumrow"><span class="sk">Company</span><span class="sv">${esc(s.company)}</span></div>`;
+    h+=`<div class="sumrow"><span class="sk">Name</span><span class="sv">${esc(s.person)}</span></div>`;
+    h+=`<div class="sumrow"><span class="sk">Mobile</span><span class="sv">${esc(s.mobile)}</span></div>`;
+    h+=`<div class="sumrow"><span class="sk">Quantity</span><span class="sv">${s.qty} controller${s.qty>1?'s':''}</span></div></div>`;
+
+    if(s.sameSpec){
+      h+=`<div class="sum-card"><div class="sum-title">⚙ All ${s.qty} controllers — same spec</div>`;
+      SPECS.forEach(sp=>{
+        h+=`<div class="sumrow"><span class="sk">${sp.label}</span><span class="sv">${esc(s.shared[sp.id]||'—')}</span></div>`;
+      });
+      h+=`</div>`;
+    } else {
+      for(let i=0;i<s.qty;i++){
+        h+=`<div class="sum-card"><div class="sum-title">⚙ Controller ${i+1}</div>`;
+        SPECS.forEach(sp=>{
+          h+=`<div class="sumrow"><span class="sk">${sp.label}</span><span class="sv">${esc((s.units[i]||{})[sp.id]||'—')}</span></div>`;
+        });
+        h+=`</div>`;
+      }
+    }
+    h+=`<div class="fgroup"><label class="fl">Additional comments</label>
+    <textarea id="f_cm" placeholder="Any special instructions or notes...">${esc(s.comments)}</textarea></div>`;
+    h+=`<div class="nav"><button class="btn-back" onclick="go(${3+SPECS.length-1})">← Back</button><button class="btn-submit" onclick="submit()">✓ Place order</button></div>`;
+
+  } else {
+    h+=`<div class="success">
+      <div style="font-size:56px">✅</div>
+      <h2>Order placed!</h2>
+      <p>Thanks ${esc(s.person)}. Your order for <strong>${s.qty} traction controller${s.qty>1?'s':''}</strong> from <strong>${esc(s.company)}</strong> has been received. We'll be in touch shortly on ${esc(s.mobile)}.</p>
+      <button class="btn-next" onclick="reset()">Place another order</button>
+    </div>`;
+  }
+
+  document.getElementById('app').innerHTML=h;
+}
+
+function step0(){
+  s.company=document.getElementById('f_co').value.trim();
+  s.person=document.getElementById('f_pe').value.trim();
+  s.mobile=document.getElementById('f_mo').value.trim();
+  if(!s.company||!s.person||!s.mobile){alert('Please fill in all fields.');return;}
+  go(1);
+}
+function setQty(n){s.qty=n;render();}
+function step1(){if(!s.qty){alert('Please select a quantity.');return;}go(2);}
+function setSame(v){
+  s.sameSpec=v;s.shared={};s.units=[];
+  if(!v){for(let i=0;i<s.qty;i++)s.units.push({});}
+  render();
+}
+function step2(){if(s.sameSpec===null){alert('Please choose an option.');return;}go(3);}
+function pickShared(id,val){s.shared[id]=val;render();}
+function pickUnit(i,id,val){if(!s.units[i])s.units[i]={};s.units[i][id]=val;render();}
+
+function specNext(specIdx){
+  const spec=SPECS[specIdx];
+  if(s.sameSpec){
+    if(!s.shared[spec.id]){alert('Please select an option for '+spec.label+'.');return;}
+  } else {
+    for(let i=0;i<s.qty;i++){
+      if(!(s.units[i]||{})[spec.id]){alert('Controller '+(i+1)+': please select '+spec.label+'.');return;}
+    }
+  }
+  go(s.step+1);
+}
+
+function submit(){
+  if(document.getElementById('f_cm')) s.comments=document.getElementById('f_cm').value;
+  go(999);
+}
+function reset(){
+  s={step:0,company:'',person:'',mobile:'',qty:0,sameSpec:null,shared:{},units:[],comments:''};
+  document.getElementById('prog').style.width='5%';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
