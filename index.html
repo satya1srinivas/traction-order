@@ -278,12 +278,13 @@ async function submit(){
     comments:s.comments
   };
 
-  try{
+try{
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(payload));
     await fetch('https://script.google.com/macros/s/AKfycbzy9MK7E50EmGNRB7UPtJ3StVQ9qrao5NJx3E1NtN7xxskIFpk6PzHKipyIP1bhRbFB/exec',{
       method:'POST',
       mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
+      body: formData
     });
     go(999);
   }catch(err){
