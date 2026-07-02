@@ -259,9 +259,37 @@ function specNext(specIdx){
   go(s.step+1);
 }
 
-function submit(){
+async function submit(){
   if(document.getElementById('f_cm')) s.comments=document.getElementById('f_cm').value;
-  go(999);
+
+  // Show submitting state
+  const btn=document.querySelector('.btn-submit');
+  if(btn){btn.disabled=true;btn.textContent='Submitting...';}
+
+  const payload={
+    source:'web_form',
+    company:s.company,
+    person:s.person,
+    mobile:s.mobile,
+    qty:s.qty,
+    sameSpec:s.sameSpec,
+    shared:s.shared,
+    units:s.units,
+    comments:s.comments
+  };
+
+  try{
+    await fetch('https://script.google.com/macros/s/AKfycbzy9MK7E50EmGNRB7UPtJ3StVQ9qrao5NJx3E1NtN7xxskIFpk6PzHKipyIP1bhRbFB/exec',{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    go(999);
+  }catch(err){
+    alert('Something went wrong. Please try again.');
+    if(btn){btn.disabled=false;btn.textContent='✓ Place order';}
+  }
 }
 function reset(){
   s={step:0,company:'',person:'',mobile:'',qty:0,sameSpec:null,shared:{},units:[],comments:''};
